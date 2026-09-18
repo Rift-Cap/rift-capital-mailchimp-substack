@@ -29,16 +29,6 @@ jobs:
       - name: Transform content
         run: python scripts/transform_content.py
 
-      - name: Notify
-        env:
-          NOTIFY_EMAIL_TO: ${{ vars.NOTIFY_EMAIL_TO }}
-          NOTIFY_EMAIL_FROM: ${{ vars.NOTIFY_EMAIL_FROM }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        run: python scripts/notify.py
-
       - name: Commit updated state and drafts
         run: |
           git config user.name "mirror-bot"
