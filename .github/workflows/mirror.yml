@@ -1,0 +1,48 @@
+name: Mirror Mailchimp to Substack drafts
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Fetch new campaigns
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          MAILCHIMP_AUDIENCE_ID: ${{ secrets.MAILCHIMP_AUDIENCE_ID }}
+        run: python scripts/fetch_campaigns.py
+
+      - name: Transform content
+        run: python scripts/transform_content.py
+
+      - name: Notify
+        env:
+          NOTIFY_EMAIL_TO: ${{ vars.NOTIFY_EMAIL_TO }}
+          NOTIFY_EMAIL_FROM: ${{ vars.NOTIFY_EMAIL_FROM }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: python scripts/notify.py
+
+      - name: Commit updated state and drafts
+        run: |
+          git config user.name "mirror-bot"
+          git config user.email "actions@github.com"
+          git add state/processed_campaigns.json drafts/
+          git diff --cached --quiet || git commit -m "Mirror: new campaign(s) prepared"
+          git push
