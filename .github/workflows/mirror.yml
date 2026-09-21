@@ -2,7 +2,11 @@ name: Mirror Mailchimp to Substack drafts
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    # Weekly: Friday 17:00 Europe/Paris (CEST, UTC+2) = 15:00 UTC.
+    # GitHub Actions cron always runs in UTC, so once Europe switches back
+    # to CET (UTC+1) in late October this will fire at 16:00 Paris time
+    # instead of 17:00 -- adjust the hour here if that matters.
+    - cron: "0 15 * * 5"
   workflow_dispatch: {}
 
 permissions:
