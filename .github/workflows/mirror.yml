@@ -12,6 +12,15 @@ on:
 permissions:
   contents: write
 
+# Never let two runs (e.g. the weekly schedule and a manual re-run) execute
+# at once -- overlapping runs would both fetch the same not-yet-processed
+# campaign, both write a draft, and race on the final `git push`, which is
+# exactly how a duplicate draft/state entry (or a rejected push) happens.
+# Queue the second run instead of cancelling it, so nothing is dropped.
+concurrency:
+  group: mirror-mailchimp-to-substack
+  cancel-in-progress: false
+
 jobs:
   mirror:
     runs-on: ubuntu-latest
@@ -39,4 +48,5 @@ jobs:
           git config user.email "actions@github.com"
           git add state/processed_campaigns.json drafts/
           git diff --cached --quiet || git commit -m "Mirror: new campaign(s) prepared"
+          git pull --rebase --autostash
           git push
