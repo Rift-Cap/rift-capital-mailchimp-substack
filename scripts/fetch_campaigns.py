@@ -21,7 +21,12 @@ from datetime import datetime, timedelta, timezone
 import requests
 
 STATE_FILE = os.path.join("state", "processed_campaigns.json")
-LOOKBACK_DAYS = 3
+# The workflow runs weekly; look back further than one week so a delayed or
+# missed run (a skipped Action, a Mailchimp outage, etc.) still catches
+# every campaign sent since the last successful run. Already-processed
+# campaigns are filtered out via state/processed_campaigns.json regardless,
+# so a wider window costs nothing but a slightly larger API response.
+LOOKBACK_DAYS = 10
 REQUEST_TIMEOUT = 30
 
 # Where Step 2 will look for this script's output. Kept out of the repo
