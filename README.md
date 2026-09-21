@@ -17,7 +17,7 @@ using Claude for Chrome.
 
 ```
 mailchimp-substack-mirror/
-├── .github/workflows/mirror.yml   # runs every 30 minutes + on demand
+├── .github/workflows/mirror.yml   # runs weekly (Fri 17:00 Paris) + on demand
 ├── scripts/
 │   ├── fetch_campaigns.py         # Step 1: find newly-sent campaigns
 │   └── transform_content.py       # Step 2: HTML -> clean Markdown
@@ -29,9 +29,11 @@ mailchimp-substack-mirror/
 ```
 
 1. **Fetch** (`scripts/fetch_campaigns.py`) calls the Mailchimp API for
-   campaigns with `status=sent` in the last 3 days, skips anything already
-   recorded in `state/processed_campaigns.json`, and pulls each new
-   campaign's full HTML content.
+   campaigns with `status=sent` in the last 10 days (a wider window than the
+   weekly cadence itself, so a delayed or missed run still catches
+   everything), skips anything already recorded in
+   `state/processed_campaigns.json`, and pulls each new campaign's full
+   HTML content.
 2. **Transform** (`scripts/transform_content.py`) strips merge tags
    (`*|FNAME|*`), the Mailchimp address/unsubscribe footer, tracking
    pixels, and "view this email in your browser" links; converts headings,
@@ -76,8 +78,8 @@ No other secrets or variables are needed -- there's no notification step.
 
 Use the **Run workflow** button (`workflow_dispatch`) on the
 `Mirror Mailchimp to Substack drafts` workflow to trigger a run on demand
-instead of waiting for the next `*/30 * * * *` tick -- this is also how the
-acceptance testing below should be done.
+instead of waiting for the next scheduled Friday 17:00 (Europe/Paris) run --
+this is also how the acceptance testing below should be done.
 
 ## Testing checklist
 
