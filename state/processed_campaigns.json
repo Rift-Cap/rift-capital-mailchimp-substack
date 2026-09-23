@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "campaign_id": "e19bea43ec",
+    "subject": "The Billion-Dollar Bet on Discovery",
+    "send_time": "2026-09-22T12:25:55+00:00",
+    "prepared_at": "2026-09-23T15:37:25Z",
+    "draft_file": "drafts/e19bea43ec.md",
+    "posted_to_substack": false
+  },
+  {
+    "campaign_id": "ee27cb0035",
+    "subject": "New Exclusive Opportunity AIRE - Rift Capital",
+    "send_time": "2026-09-22T11:08:28+00:00",
+    "prepared_at": "2026-09-23T15:37:26Z",
+    "draft_file": "drafts/ee27cb0035.md",
+    "posted_to_substack": false
+  },
+  {
+    "campaign_id": "c477c2eb1a",
+    "subject": "New Opportunity: AIRE - Stealth Seed Round at ~$1.5B led by General Catalyst",
+    "send_time": "2026-09-22T10:49:44+00:00",
+    "prepared_at": "2026-09-23T15:37:26Z",
+    "draft_file": "drafts/c477c2eb1a.md",
+    "posted_to_substack": false
+  }
+]
